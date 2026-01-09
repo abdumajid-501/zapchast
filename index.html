@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <title>Avto Zapchastlar</title>
+  <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+
+<header>
+  <h1>🚗 Avto Zapchastlar</h1>
+  <button id="themeBtn">🌙 / ☀️</button>
+</header>
+
+<section class="add-product">
+  <h2>➕ Zapchast qo'shish</h2>
+
+  <input id="name" placeholder="Zapchast nomi">
+  <select id="category">
+    <option value="mator">Mator</option>
+    <option value="xadavoy">Xadavoy</option>
+    <option value="karobka">Karobka</option>
+  </select>
+
+  <select id="car">
+    <option>Daewoo Tico</option>
+    <option>Daewoo Matiz</option>
+    <option>Daewoo Nexia</option>
+    <option>Daewoo Damas</option>
+    <option>Chevrolet Spark</option>
+    <option>Chevrolet Cobalt</option>
+    <option>Chevrolet Lacetti</option>
+    <option>Chevrolet Gentra</option>
+  </select>
+
+  <input id="price" type="number" placeholder="Narxi (so'm)">
+  <input id="stock" type="number" placeholder="Boshlang'ich soni">
+
+  <button id="addBtn">Qo'shish</button>
+</section>
+
+<section>
+  <h2>🧩 Zapchastlar</h2>
+  <div id="products" class="products"></div>
+</section>
+
+<!-- JS faylni ulash -->
+<script src="./main.js"></script>
+
+</body>
+</html>
