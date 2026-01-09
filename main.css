@@ -3,12 +3,14 @@
   --card: #ffffff;
   --text: #0f172a;
   --accent: #f97316;
+  --delete: #ef4444; /* O'chirish tugmasi qizil */
 }
 
 body.dark {
   --bg: #020617;
   --card: #0f172a;
   --text: #e5e7eb;
+  --delete: #f87171;
 }
 
 body {
@@ -25,7 +27,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* mobilda tugma pastga tushadi */
+  flex-wrap: wrap; /* mobil uchun */
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -37,17 +39,18 @@ header {
   border: none;
   padding: 8px 12px;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 6px;
   margin-top: 10px;
 }
 
+/* ================= ADD PRODUCT ================= */
 .add-product {
   background: var(--card);
   padding: 15px;
   display: grid;
   gap: 10px;
   max-width: 400px;
-  width: 100%; /* responsive */
+  width: 100%;
   border-radius: 10px;
   margin-bottom: 20px;
   box-sizing: border-box;
@@ -70,7 +73,7 @@ button {
   border: none;
   cursor: pointer;
   transition: 0.2s;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 button:hover {
@@ -78,12 +81,14 @@ button:hover {
   transform: scale(1.02);
 }
 
+/* ================= PRODUCTS GRID ================= */
 .products {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 15px;
 }
 
+/* ================= CARD ================= */
 .card {
   background: var(--card);
   padding: 15px;
@@ -91,13 +96,16 @@ button:hover {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Card ichidagi elementlar orasidagi masofa */
 }
 
 .counter {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .counter button {
@@ -107,8 +115,28 @@ button:hover {
   font-size: 18px;
 }
 
+.deleteBtn {
+  background: var(--delete);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-end; /* Card oxiriga o‘ngga chiqaradi */
+  margin-top: 5px;
+}
+
+.deleteBtn:hover {
+  opacity: 0.8;
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .products {
     grid-template-columns: 1fr; /* 1 column mobil uchun */
   }
@@ -125,5 +153,10 @@ button:hover {
     width: 28px;
     height: 28px;
     font-size: 16px;
+  }
+
+  .deleteBtn {
+    align-self: flex-start; /* mobil ekranda card pastki o‘ngdan chapga tushadi */
+    padding: 5px 8px;
   }
 }

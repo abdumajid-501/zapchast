@@ -68,6 +68,13 @@ function decrease(id) {
   renderProducts();
 }
 
+/* ================= DELETE PRODUCT ================= */
+function removeProduct(id) {
+  products = products.filter(p => p.id !== id);
+  saveProducts();
+  renderProducts();
+}
+
 /* ================= RENDER ================= */
 function renderProducts() {
   productsDiv.innerHTML = '';
@@ -80,19 +87,19 @@ function renderProducts() {
       <h3>${p.name}</h3>
       <p><b>Mashina:</b> ${p.car}</p>
       <p><b>Kategoriya:</b> ${p.category}</p>
-      <p><b>Narxi:</b> ${p.price.toLocaleString()} so‘m</p>
+      <p><b>Narxi:</b> ${p.price.toLocaleString()} so'm</p>
       <div class="counter">
         <button class="decrease">➖</button>
         <span>${p.count}</span>
         <button class="increase">➕</button>
       </div>
+      <button class="deleteBtn">🗑 O'chirish</button>
     `;
 
-    const increaseBtn = card.querySelector('.increase');
-    const decreaseBtn = card.querySelector('.decrease');
-
-    increaseBtn.addEventListener('click', () => increase(p.id));
-    decreaseBtn.addEventListener('click', () => decrease(p.id));
+    // Buttonlar uchun event listener
+    card.querySelector('.increase').addEventListener('click', () => increase(p.id));
+    card.querySelector('.decrease').addEventListener('click', () => decrease(p.id));
+    card.querySelector('.deleteBtn').addEventListener('click', () => removeProduct(p.id));
 
     productsDiv.appendChild(card);
   });
