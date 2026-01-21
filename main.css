@@ -30,12 +30,11 @@ body {
 .logo span { color: var(--primary); }
 
 .category-nav {
-    display: flex; gap: 10px; overflow-x: auto; padding: 15px 20px;
-    scrollbar-width: none;
+    display: flex; gap: 5px; overflow-x: auto; padding: 15px 15px;
 }
 .category-nav::-webkit-scrollbar { display: none; }
 .tab {
-    padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border);
+    padding: 8px 18px; border-radius: 20px; border: 1px solid var(--border);
     background: var(--card); color: var(--text); white-space: nowrap;
     cursor: pointer; font-weight: 500;
 }
