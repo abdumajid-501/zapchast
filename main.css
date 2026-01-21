@@ -1,162 +1,97 @@
 :root {
-  --bg: #f1f5f9;
-  --card: #ffffff;
-  --text: #0f172a;
-  --accent: #f97316;
-  --delete: #ef4444; /* O'chirish tugmasi qizil */
+    --primary: #3b82f6;
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --text: #1f2937;
+    --border: #e5e7eb;
 }
 
 body.dark {
-  --bg: #020617;
-  --card: #0f172a;
-  --text: #e5e7eb;
-  --delete: #f87171;
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #f8fafc;
+    --border: #334155;
 }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  transition: 0.3s;
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body { 
+    margin: 0; font-family: 'Outfit', sans-serif; 
+    background-color: var(--bg); color: var(--text);
+    transition: background 0.3s;
 }
 
-header {
-  background: var(--card);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap; /* mobil uchun */
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+.header {
+    background: var(--card); padding: 15px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
+.logo { font-size: 1.5rem; font-weight: 700; }
+.logo span { color: var(--primary); }
 
-.theme-btn {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 6px;
-  margin-top: 10px;
+.category-nav {
+    display: flex; gap: 10px; overflow-x: auto; padding: 15px 20px;
+    scrollbar-width: none;
 }
-
-/* ================= ADD PRODUCT ================= */
-.add-product {
-  background: var(--card);
-  padding: 15px;
-  display: grid;
-  gap: 10px;
-  max-width: 400px;
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
+.category-nav::-webkit-scrollbar { display: none; }
+.tab {
+    padding: 8px 20px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); white-space: nowrap;
+    cursor: pointer; font-weight: 500;
 }
+.tab.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-.add-product input,
-.add-product select,
-.add-product button {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  font-size: 16px;
-}
+.container { padding: 0 20px 100px; max-width: 800px; margin: auto; }
+.stats-bar { margin-bottom: 15px; font-size: 0.9rem; opacity: 0.8; }
 
-button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s;
-  border-radius: 8px;
-}
+.product-list { display: grid; gap: 15px; }
 
-button:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
-}
-
-/* ================= PRODUCTS GRID ================= */
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 15px;
-}
-
-/* ================= CARD ================= */
 .card {
-  background: var(--card);
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    background: var(--card); border-radius: 16px; padding: 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    border: 1px solid var(--border); animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } }
+
+.card-info { flex: 1; padding-right: 10px; overflow: hidden; }
+.card-info h4 { margin: 0 0 5px; font-size: 1.1rem; word-break: break-all; }
+.card-info p { margin: 0; font-size: 0.85rem; color: var(--primary); font-weight: 600; }
+
+.delete-btn {
+    background: #fee2e2; color: #ef4444; border: none;
+    width: 40px; height: 40px; border-radius: 12px; cursor: pointer;
+}
+
+.fab {
+    position: fixed; bottom: 30px; right: 30px;
+    width: 60px; height: 60px; border-radius: 30px;
+    background: var(--primary); color: white; border: none;
+    font-size: 30px; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+    cursor: pointer; z-index: 1000;
+}
+
+.modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: none; align-items: center; justify-content: center; z-index: 2000;
+    padding: 20px;
+}
+.modal.open { display: flex; }
+.modal-content {
+    background: var(--card); padding: 25px; border-radius: 24px;
+    width: 100%; max-width: 600px; display: grid; gap: 15px;
+}
+.modal-content input, .modal-content select {
   width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* Card ichidagi elementlar orasidagi masofa */
+    padding: 12px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); 
 }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 5px;
-}
+.modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.save-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+.cancel-btn { background: var(--border); color: var(--text); border: none; padding: 12px; border-radius: 12px; cursor: pointer; }
 
-.counter button {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 18px;
-}
-
-.deleteBtn {
-  background: var(--delete);
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  align-self: flex-end; /* Card oxiriga o‘ngga chiqaradi */
-  margin-top: 5px;
-}
-
-.deleteBtn:hover {
-  opacity: 0.8;
-}
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .products {
-    grid-template-columns: 1fr; /* 1 column mobil uchun */
-  }
-
-  .add-product {
-    max-width: 100%;
-  }
-
-  .counter {
-    gap: 5px;
-  }
-
-  .counter button {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
-  }
-
-  .deleteBtn {
-    align-self: flex-start; /* mobil ekranda card pastki o‘ngdan chapga tushadi */
-    padding: 5px 8px;
-  }
+@media (min-width: 800px) {
+    .product-list { grid-template-columns: 1fr 1fr; }
 }

@@ -1,109 +1,115 @@
-/* ================= ELEMENTLAR ================= */
-const nameInput = document.getElementById('name');
-const categorySelect = document.getElementById('category');
-const carSelect = document.getElementById('car');
-const priceInput = document.getElementById('price');
-const stockInput = document.getElementById('stock');
+// ================= ELEMENTLAR =================
+const productList = document.getElementById('productList');
+const openModalBtn = document.getElementById('openModal');
+const closeModalBtn = document.getElementById('closeModal');
+const modal = document.getElementById('formModal');
 const addBtn = document.getElementById('addBtn');
-const productsDiv = document.getElementById('products');
-const themeBtn = document.getElementById('themeBtn');
+const totalCount = document.getElementById('totalCount');
+const themeToggle = document.getElementById('themeToggle');
+const categoryTabs = document.getElementById('categoryTabs');
 
-/* ================= DATA ================= */
-let products = JSON.parse(localStorage.getItem('products')) || [];
-let theme = localStorage.getItem('theme') || 'light';
+// ================= DATA =================
+let products = JSON.parse(localStorage.getItem('parts_mobile_v1')) || [];
+let filter = 'all';
 
-/* ================= THEME ================= */
-if(theme === 'dark') document.body.classList.add('dark');
-
-themeBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-});
-
-/* ================= STORAGE ================= */
-function saveProducts() {
-  localStorage.setItem('products', JSON.stringify(products));
+// ================= THEME INIT =================
+const savedTheme = localStorage.getItem('theme_mobile_v1');
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
 }
 
-/* ================= ADD PRODUCT ================= */
-addBtn.addEventListener('click', () => {
-  const product = {
-    id: Date.now(),
-    name: nameInput.value.trim(),
-    category: categorySelect.value,
-    car: carSelect.value,
-    price: Number(priceInput.value),
-    count: Number(stockInput.value)
-  };
+// ================= THEME TOGGLE =================
+themeToggle.onclick = () => {
+  document.body.classList.toggle('dark');
 
-  if(!product.name || product.price <= 0 || product.count <= 0) {
-    alert("Maʼlumotlarni to‘liq kiriting");
+  localStorage.setItem(
+    'theme_mobile_v1',
+    document.body.classList.contains('dark') ? 'dark' : 'light'
+  );
+};
+
+// ================= MODAL =================
+openModalBtn.onclick = () => modal.classList.add('open');
+closeModalBtn.onclick = () => modal.classList.remove('open');
+
+// ================= ADD PRODUCT =================
+addBtn.onclick = () => {
+  const name = document.getElementById('name').value.trim();
+  const cat = document.getElementById('category').value;
+  const price = Number(document.getElementById('price').value);
+  const count = Number(document.getElementById('count').value);
+
+  if (!name || price <= 0 || count <= 0) {
+    alert("Barcha maydonlarni to'g'ri to'ldiring!");
     return;
   }
 
-  products.push(product);
-  saveProducts();
-  renderProducts();
+  products.unshift({
+    id: Date.now(),
+    name,
+    cat,
+    price,
+    count
+  });
 
-  // Inputlarni tozalash
-  nameInput.value = '';
-  priceInput.value = '';
-  stockInput.value = '';
-});
+  saveAndRender();
 
-/* ================= COUNT CONTROL ================= */
-function increase(id) {
-  const p = products.find(p => p.id === id);
-  if(!p) return;
-  p.count++;
-  saveProducts();
-  renderProducts();
-}
+  // form reset + close modal
+  document.getElementById('name').value = '';
+  document.getElementById('price').value = '';
+  document.getElementById('count').value = '';
+  modal.classList.remove('open');
+};
 
-function decrease(id) {
-  const p = products.find(p => p.id === id);
-  if(!p) return;
-  if(p.count > 0) p.count--;
-  saveProducts();
-  renderProducts();
-}
-
-/* ================= DELETE PRODUCT ================= */
-function removeProduct(id) {
+// ================= DELETE =================
+function deleteItem(id) {
   products = products.filter(p => p.id !== id);
-  saveProducts();
-  renderProducts();
+  saveAndRender();
 }
 
-/* ================= RENDER ================= */
-function renderProducts() {
-  productsDiv.innerHTML = '';
+// ================= FILTER =================
+categoryTabs.onclick = (e) => {
+  if (e.target.classList.contains('tab')) {
+    document.querySelectorAll('.tab').forEach(t =>
+      t.classList.remove('active')
+    );
+    e.target.classList.add('active');
+    filter = e.target.dataset.cat;
+    render();
+  }
+};
 
-  products.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'card';
+// ================= SAVE + RENDER =================
+function saveAndRender() {
+  localStorage.setItem('parts_mobile_v1', JSON.stringify(products));
+  render();
+}
 
-    card.innerHTML = `
-      <h3>${p.name}</h3>
-      <p><b>Mashina:</b> ${p.car}</p>
-      <p><b>Kategoriya:</b> ${p.category}</p>
-      <p><b>Narxi:</b> ${p.price.toLocaleString()} so'm</p>
-      <div class="counter">
-        <button class="decrease">➖</button>
-        <span>${p.count}</span>
-        <button class="increase">➕</button>
+// ================= RENDER =================
+function render() {
+  productList.innerHTML = '';
+
+  const filteredItems =
+    filter === 'all'
+      ? products
+      : products.filter(p => p.cat === filter);
+
+  totalCount.textContent = filteredItems.length;
+
+  filteredItems.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="card-info">
+        <h4 title="${p.name}">${p.name}</h4>
+        <p>${p.price.toLocaleString('uz-UZ')} so'm • ${p.count} ta</p>
+        <small>${p.cat}</small>
       </div>
-      <button class="deleteBtn">🗑 O'chirish</button>
+      <button class="delete-btn" onclick="deleteItem(${p.id})">🗑️</button>
     `;
-
-    // Buttonlar uchun event listener
-    card.querySelector('.increase').addEventListener('click', () => increase(p.id));
-    card.querySelector('.decrease').addEventListener('click', () => decrease(p.id));
-    card.querySelector('.deleteBtn').addEventListener('click', () => removeProduct(p.id));
-
-    productsDiv.appendChild(card);
+    productList.appendChild(div);
   });
 }
 
-/* ================= INIT ================= */
-renderProducts();
+// ================= INIT =================
+render();

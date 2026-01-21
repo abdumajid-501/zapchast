@@ -1,50 +1,59 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Responsive uchun -->
-  <title>Avto Zapchastlar</title>
-  <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AutoParts Pro Mobile</title>
+    <link rel="stylesheet" href="./main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<header>
-  <h1>🚗 Avto Zapchastlar</h1>
-  <button id="themeBtn">🌙 / ☀️</button>
-</header>
+<div class="app">
+    <header class="header">
+        <div class="logo">Auto<span>Parts</span></div>
+        <button id="themeToggle" class="icon-btn">🌓</button>
+    </header>
 
-<section class="add-product">
-  <h2>➕ Zapchast qo‘shish</h2>
+    <nav class="category-nav" id="categoryTabs">
+        <button class="tab active" data-cat="all">Hammasi</button>
+        <button class="tab" data-cat="Mator">Mator</button>
+        <button class="tab" data-cat="Xadavoy">Xadavoy</button>
+        <button class="tab" data-cat="Karobka">Karobka</button>
+    </nav>
 
-  <input id="name" placeholder="Zapchast nomi">
-  <select id="category">
-    <option value="mator">Mator</option>
-    <option value="xadavoy">Xadavoy</option>
-    <option value="karobka">Karobka</option>
-  </select>
+    <main class="container">
+        <div class="stats-bar">
+            <span>Jami: <b id="totalCount">0</b> ta mahsulot</span>
+        </div>
+        
+        <div class="product-list" id="productList">
+            </div>
+    </main>
 
-  <select id="car">
-    <option>Daewoo Tico</option>
-    <option>Daewoo Matiz</option>
-    <option>Daewoo Nexia</option>
-    <option>Daewoo Damas</option>
-    <option>Chevrolet Spark</option>
-    <option>Chevrolet Cobalt</option>
-    <option>Chevrolet Lacetti</option>
-    <option>Chevrolet Gentra</option>
-  </select>
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <h3>Yangi qo'shish</h3>
+            <input type="text" id="name" placeholder="Nomi" maxlength="50">
+            <select id="category">
+                <option value="Mator">Mator</option>
+                <option value="Xadavoy">Xadavoy</option>
+                <option value="Karobka">Karobka</option>
+            </select>
+            <div class="row">
+                <input type="number" id="price" placeholder="Narxi">
+                <input type="number" id="count" placeholder="Soni">
+            </div>
+            <div class="modal-btns">
+                <button class="cancel-btn" id="closeModal">Bekor qilish</button>
+                <button class="save-btn" id="addBtn">Saqlash</button>
+            </div>
+        </div>
+    </div>
 
-  <input id="price" type="number" placeholder="Narxi (so'm)">
-  <input id="stock" type="number" placeholder="Boshlang'ich soni">
+    <button class="fab" id="openModal">+</button>
+</div>
 
-  <button id="addBtn">Qo'shish</button>
-</section>
-
-<section>
-  <h2>🧩 Zapchastlar</h2>
-  <div id="products" class="products"></div>
-</section>
-
-<script src="main.js"></script> <!-- JS alohida fayl -->
+<script src="./main.js"></script>
 </body>
 </html>
