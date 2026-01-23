@@ -1,57 +1,70 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AutoParts Pro Mobile</title>
-    <link rel="stylesheet" href="./main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AutoParts Pro</title>
+
+  <link rel="stylesheet" href="./main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="app">
-    <header class="header">
-        <div class="logo">Auto<span>Parts</span></div>
-        <button id="themeToggle" class="icon-btn">🌓</button>
-    </header>
+  <header class="header">
+    <div class="logo">Auto<span>Parts</span></div>
+    <button id="themeToggle" class="icon-btn">🌓</button>
+  </header>
 
-    <nav class="category-nav" id="categoryTabs">
-        <button class="tab active" data-cat="all">Hammasi</button>
-        <button class="tab" data-cat="Mator">Mator</button>
-        <button class="tab" data-cat="Xadavoy">Xadavoy</button>
-        <button class="tab" data-cat="Karobka">Karobka</button>
-    </nav>
+  <nav class="category-nav" id="categoryTabs">
+    <button class="tab active" data-cat="all">Hammasi</button>
+    <button class="tab" data-cat="Mator">Mator</button>
+    <button class="tab" data-cat="Xadavoy">Xadavoy</button>
+    <button class="tab" data-cat="Karobka">Karobka</button>
+  </nav>
 
-    <main class="container">
-        <div class="stats-bar">
-            <span>Jami: <b id="totalCount">0</b> ta mahsulot</span>
-        </div>
-        
-        <div class="product-list" id="productList">
-            </div>
-    </main>
+  <main class="container">
+    <input
+      type="text"
+      id="searchInput"
+      class="search"
+      placeholder="Qidirish (zapchast yoki mashina)"
+    >
 
-    <div id="formModal" class="modal">
-        <div class="modal-content">
-            <h3>Yangi qo'shish</h3>
-            <input type="text" id="name" placeholder="Nomi" maxlength="50">
-            <select id="category">
-                <option value="Mator">Mator</option>
-                <option value="Xadavoy">Xadavoy</option>
-                <option value="Karobka">Karobka</option>
-            </select>
-            <div class="row">
-                <input type="number" id="price" placeholder="Narxi">
-                <input type="number" id="count" placeholder="Soni">
-            </div>
-            <div class="modal-btns">
-                <button class="cancel-btn" id="closeModal">Bekor qilish</button>
-                <button class="save-btn" id="addBtn">Saqlash</button>
-            </div>
-        </div>
+    <div class="stats-bar">
+      Jami: <b id="totalCount">0</b> ta mahsulot
     </div>
 
-    <button class="fab" id="openModal">+</button>
+    <div class="product-list" id="productList"></div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="formModal" class="modal">
+    <div class="modal-content">
+      <h3>Zapchast qo‘shish / tahrirlash</h3>
+
+      <input type="text" id="nameInput" placeholder="Zapchast nomi">
+      <input type="text" id="carInput" placeholder="Mashina nomi">
+
+      <select id="category">
+        <option value="Mator">Mator</option>
+        <option value="Xadavoy">Xadavoy</option>
+        <option value="Karobka">Karobka</option>
+      </select>
+
+      <div class="row">
+        <input type="number" id="priceInput" placeholder="Narxi">
+        <input type="number" id="countInput" placeholder="Soni">
+      </div>
+
+      <div class="modal-btns">
+        <button class="cancel-btn" id="closeModal">Bekor qilish</button>
+        <button class="save-btn" id="addBtn">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="fab" id="openModal">+</button>
 </div>
 
 <script src="./main.js"></script>

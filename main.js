@@ -1,4 +1,3 @@
-// ================= ELEMENTLAR =================
 const productList = document.getElementById('productList');
 const openModalBtn = document.getElementById('openModal');
 const closeModalBtn = document.getElementById('closeModal');
@@ -7,109 +6,153 @@ const addBtn = document.getElementById('addBtn');
 const totalCount = document.getElementById('totalCount');
 const themeToggle = document.getElementById('themeToggle');
 const categoryTabs = document.getElementById('categoryTabs');
+const searchInput = document.getElementById('searchInput');
 
-// ================= DATA =================
-let products = JSON.parse(localStorage.getItem('parts_mobile_v1')) || [];
+const nameInput = document.getElementById('nameInput');
+const carInput = document.getElementById('carInput');
+const priceInput = document.getElementById('priceInput');
+const countInput = document.getElementById('countInput');
+const category = document.getElementById('category');
+
+let products = JSON.parse(localStorage.getItem('parts_mobile_v2')) || [];
 let filter = 'all';
+let editId = null;
 
-// ================= THEME INIT =================
-const savedTheme = localStorage.getItem('theme_mobile_v1');
-if (savedTheme === 'dark') {
+const LOW_LIMIT = 5;
+
+/* THEME */
+if (localStorage.getItem('theme_mobile_v2') === 'dark') {
   document.body.classList.add('dark');
 }
-
-// ================= THEME TOGGLE =================
 themeToggle.onclick = () => {
   document.body.classList.toggle('dark');
-
   localStorage.setItem(
-    'theme_mobile_v1',
+    'theme_mobile_v2',
     document.body.classList.contains('dark') ? 'dark' : 'light'
   );
 };
 
-// ================= MODAL =================
+/* MODAL */
 openModalBtn.onclick = () => modal.classList.add('open');
-closeModalBtn.onclick = () => modal.classList.remove('open');
+closeModalBtn.onclick = () => {
+  modal.classList.remove('open');
+  editId = null;
+};
 
-// ================= ADD PRODUCT =================
+/* ADD / EDIT */
 addBtn.onclick = () => {
-  const name = document.getElementById('name').value.trim();
-  const cat = document.getElementById('category').value;
-  const price = Number(document.getElementById('price').value);
-  const count = Number(document.getElementById('count').value);
+  const name = nameInput.value.trim();
+  const car = carInput.value.trim();
+  const price = Number(priceInput.value);
+  const count = Number(countInput.value);
+  const cat = category.value;
 
-  if (!name || price <= 0 || count <= 0) {
-    alert("Barcha maydonlarni to'g'ri to'ldiring!");
+  if (!name || !car || price <= 0 || count <= 0) {
+    alert("Barcha maydonlarni to‘ldiring");
     return;
   }
 
-  products.unshift({
-    id: Date.now(),
-    name,
-    cat,
-    price,
-    count
-  });
+  if (editId) {
+    const p = products.find(x => x.id === editId);
+    p.name = name;
+    p.car = car;
+    p.price = price;
+    p.count = count;
+    p.cat = cat;
+    editId = null;
+  } else {
+    products.unshift({
+      id: Date.now(),
+      name,
+      car,
+      price,
+      count,
+      cat
+    });
+  }
 
-  saveAndRender();
-
-  // form reset + close modal
-  document.getElementById('name').value = '';
-  document.getElementById('price').value = '';
-  document.getElementById('count').value = '';
+  save();
   modal.classList.remove('open');
+  nameInput.value = carInput.value = priceInput.value = countInput.value = '';
 };
 
-// ================= DELETE =================
+/* DELETE */
 function deleteItem(id) {
   products = products.filter(p => p.id !== id);
-  saveAndRender();
+  save();
 }
 
-// ================= FILTER =================
-categoryTabs.onclick = (e) => {
+/* EDIT */
+function editItem(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+
+  editId = id;
+  modal.classList.add('open');
+
+  nameInput.value = p.name;
+  carInput.value = p.car;
+  priceInput.value = p.price;
+  countInput.value = p.count;
+  category.value = p.cat;
+}
+
+/* FILTER */
+categoryTabs.onclick = e => {
   if (e.target.classList.contains('tab')) {
-    document.querySelectorAll('.tab').forEach(t =>
-      t.classList.remove('active')
-    );
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     e.target.classList.add('active');
     filter = e.target.dataset.cat;
     render();
   }
 };
 
-// ================= SAVE + RENDER =================
-function saveAndRender() {
-  localStorage.setItem('parts_mobile_v1', JSON.stringify(products));
+searchInput.oninput = render;
+
+function save() {
+  localStorage.setItem('parts_mobile_v2', JSON.stringify(products));
   render();
 }
 
-// ================= RENDER =================
 function render() {
   productList.innerHTML = '';
 
-  const filteredItems =
-    filter === 'all'
-      ? products
-      : products.filter(p => p.cat === filter);
+  let list = filter === 'all'
+    ? products
+    : products.filter(p => p.cat === filter);
 
-  totalCount.textContent = filteredItems.length;
+  const search = searchInput.value.toLowerCase();
+  if (search) {
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(search) ||
+      p.car.toLowerCase().includes(search)
+    );
+  }
 
-  filteredItems.forEach(p => {
+  totalCount.textContent = list.length;
+
+  list.forEach(p => {
     const div = document.createElement('div');
     div.className = 'card';
+
+    if (p.count <= LOW_LIMIT) {
+      div.classList.add('low-stock');
+    }
+
     div.innerHTML = `
       <div class="card-info">
-        <h4 title="${p.name}">${p.name}</h4>
+        <h4>${p.name}</h4>
+        <small>🚗 ${p.car}</small>
         <p>${p.price.toLocaleString('uz-UZ')} so'm • ${p.count} ta</p>
         <small>${p.cat}</small>
       </div>
-      <button class="delete-btn" onclick="deleteItem(${p.id})">🗑️</button>
+      <div>
+        <button class="edit-btn" onclick="editItem(${p.id})">✏️</button>
+        <button class="delete-btn" onclick="deleteItem(${p.id})">🗑️</button>
+      </div>
     `;
     productList.appendChild(div);
   });
 }
 
-// ================= INIT =================
 render();
